@@ -48,12 +48,15 @@
             
             Assembly.Write(assemblyMutatedFileName);
 
-            return new MutationResult {MutatorUsed = mutatorToUse};
+            return new MutationResult {MutatorsUsed = mutatorToUse};
         }
 
-        private string DiscoverMutatorsToUse()
+        private List<string> DiscoverMutatorsToUse()
         {
-            return _mutators.First(m => m.CanHandle(MethodDefinition.Body.Instructions)).GetType().Name;
+            var result = new List<string>();
+            result.AddRange(_mutators.Where(m => m.CanHandle(MethodDefinition.Body.Instructions)).Select(m => m.GetType().Name));
+
+            return result;
         }
     }
 }

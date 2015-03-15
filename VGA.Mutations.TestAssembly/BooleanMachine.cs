@@ -6,5 +6,10 @@
         {
             return a > b;
         }
+
+        public bool LessThan(int a, int b)
+        {
+            return a < b;
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿namespace VGA.Mutations
 {
+    using System.Collections.Generic;
+
     public class MutationResult
     {
-        public string MutatorUsed { get; set; }
+        public List<string> MutatorsUsed { get; set; }
     }
 }

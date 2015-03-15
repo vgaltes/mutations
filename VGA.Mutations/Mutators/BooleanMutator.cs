@@ -8,7 +8,7 @@
     {
         public bool CanHandle(IEnumerable<Instruction> instructions)
         {
-            var booleanOpCodes = new[] { OpCodes.Cgt };
+            var booleanOpCodes = new[] {OpCodes.Cgt, OpCodes.Clt};
 
             return instructions.Any(i => booleanOpCodes.Contains(i.OpCode));
         }
