@@ -16,7 +16,7 @@
         [Test]
         public void WhenAMethodIsSpecified_TheMethodInfoShouldBeLoaded()
         {
-            new Mutation().Create<Calculator>().For("Add").MethodInfo.Should().NotBeNull();
+            new Mutation().Create<Calculator>().For("Add").MethodDefinition.Should().NotBeNull();
         }
     }
 }
