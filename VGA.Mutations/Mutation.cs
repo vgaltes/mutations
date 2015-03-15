@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Mono.Cecil;
-    using Mono.Cecil.Cil;
     using Mutators;
 
     public class Mutation
@@ -26,7 +25,6 @@
 
         public Mutation Create<T>() where T : class
         {
-            
             _typeToMutate = typeof (T);
             var fileUri = new Uri(_typeToMutate.Assembly.CodeBase);
             Assembly = AssemblyDefinition.ReadAssembly(fileUri.LocalPath);
@@ -55,11 +53,7 @@
 
         private string DiscoverMutatorsToUse()
         {
-            var mutatorToUse = "";
-
-            mutatorToUse = _mutators.First(m => m.CanHandle(MethodDefinition.Body.Instructions)).GetType().Name;
-
-            return mutatorToUse;
+            return _mutators.First(m => m.CanHandle(MethodDefinition.Body.Instructions)).GetType().Name;
         }
     }
 }
