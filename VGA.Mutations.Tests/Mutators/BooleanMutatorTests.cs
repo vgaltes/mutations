@@ -1,18 +1,20 @@
 ﻿namespace VGA.Mutations.Tests.Mutators
 {
+    using System.Linq;
     using FluentAssertions;
     using NUnit.Framework;
     using TestAssembly;
 
     [TestFixture]
-    public class BooleanMutator
+    public class BooleanMutatorTests
     {
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAGT_ShouldUseTheBooleanMutator()
         {
-            new Mutation().Create<BooleanMachine>()
-                .For("GreaterThan")
+            Mutation.For<BooleanMachine>()
+                .InMethod("GreaterThan")
                 .Run()
+                .First()
                 .MutatorsUsed.Should()
                 .ContainSingle("BooleanMutator");
         }
@@ -20,9 +22,10 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsALT_ShouldUseTheBooleanMutator()
         {
-            new Mutation().Create<BooleanMachine>()
-                .For("LessThan")
+            Mutation.For<BooleanMachine>()
+                .InMethod("LessThan")
                 .Run()
+                .First()
                 .MutatorsUsed.Should()
                 .ContainSingle("BooleanMutator");
         }

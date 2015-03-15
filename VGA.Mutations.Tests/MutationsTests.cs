@@ -9,21 +9,22 @@
     public class MutationsTests
     {
         [Test]
-        public void WhenAMethodIsSpecified_TheMethodInfoShouldBeLoaded()
+        public void WhenAMutationIsCreatedForAClass_AMutationClassObjectIsCreated()
         {
-            new Mutation().Create<Calculator>().For("Add").MethodDefinition.Should().NotBeNull();
+            Mutation.For<Calculator>().Should().BeOfType<MutationClass>();
         }
+
 
         [Test]
-        public void WhenAMutationIsCreated_TheAssemblyShouldBeLoaded()
+        public void WhenAMethodIsSpecified_AMutationRunnerObjectIsCreated()
         {
-            new Mutation().Create<Calculator>().Assembly.Should().NotBeNull();
+            Mutation.For<Calculator>().InMethod("Add").Should().BeOfType<MutationRunner>();
         }
-
+        
         [Test]
         public void WhenTheMutationRuns_ShouldCreateANewFile()
         {
-            new Mutation().Create<Calculator>().For("Add").Run();
+            Mutation.For<Calculator>().InMethod("Add").Run();
 
             File.Exists(".\\VGA.Mutations.TestAssembly_Mutated.dll").Should().BeTrue();
         }

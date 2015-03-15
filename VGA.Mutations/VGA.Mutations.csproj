@@ -52,10 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mutation.cs" />
+    <Compile Include="MutationClass.cs" />
     <Compile Include="MutationResult.cs" />
+    <Compile Include="MutationRunner.cs" />
     <Compile Include="Mutators\ArithmeticMutator.cs" />
     <Compile Include="Mutators\BooleanMutator.cs" />
-    <Compile Include="Mutators\IMutator.cs" />
+    <Compile Include="Mutators\Mutator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

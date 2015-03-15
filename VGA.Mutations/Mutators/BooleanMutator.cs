@@ -1,21 +1,22 @@
 ﻿namespace VGA.Mutations.Mutators
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Mono.Cecil.Cil;
 
-    public class BooleanMutator : IMutator
+    public class BooleanMutator : Mutator
     {
-        public bool CanHandle(IEnumerable<Instruction> instructions)
+        protected override string Name
         {
-            var booleanOpCodes = new[] {OpCodes.Cgt, OpCodes.Clt};
-
-            return instructions.Any(i => booleanOpCodes.Contains(i.OpCode));
+            get { return "BooleanMutator"; }
         }
 
-        public List<string> Mutate(IEnumerable<Instruction> instructions)
+        protected override Dictionary<OpCode, IEnumerable<OpCode>> Mutations
         {
-            return new List<string>();
+            get { return new Dictionary<OpCode, IEnumerable<OpCode>>
+                    {
+                        {OpCodes.Cgt, new []{OpCodes.Clt}}
+                    }; 
+            }
         }
     }
 }

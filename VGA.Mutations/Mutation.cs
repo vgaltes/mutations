@@ -8,7 +8,7 @@
 
     public class Mutation
     {
-        private readonly List<IMutator> _mutators; 
+        private readonly List<Mutator> _mutators; 
         public AssemblyDefinition Assembly { get; set; }
         public MethodDefinition MethodDefinition { get; set; }
 
@@ -16,14 +16,20 @@
 
         public Mutation()
         {
-            _mutators = new List<IMutator>
+            _mutators = new List<Mutator>
             {
                 new ArithmeticMutator(),
                 new BooleanMutator()
             };
         }
 
-        public Mutation Create<T>() where T : class
+        public static MutationClass For<T>() where T : class
+        {
+            var typeToMutate = typeof(T);
+            return new MutationClass(typeToMutate);
+        }
+
+        /*public Mutation For<T>() where T : class
         {
             _typeToMutate = typeof (T);
             var fileUri = new Uri(_typeToMutate.Assembly.CodeBase);
@@ -32,7 +38,7 @@
             return this;
         }
 
-        public Mutation For(string methodName)
+        public Mutation InMethod(string methodName)
         {
             MethodDefinition =
                 Assembly.MainModule.GetType(_typeToMutate.FullName).Methods.First(m => m.Name == methodName);
@@ -59,14 +65,6 @@
             Assembly.Write(assemblyMutatedFileName);
 
             return new MutationResult {MutatorsUsed = mutatorsToUse, MutationsPerformed = mutationsPerformed};
-        }
-
-        private List<string> DiscoverMutatorsToUse()
-        {
-            var result = new List<string>();
-            result.AddRange(_mutators.Where(m => m.CanHandle(MethodDefinition.Body.Instructions)).Select(m => m.GetType().Name));
-
-            return result;
-        }
+        }*/
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace VGA.Mutations.Tests.Mutators
 {
-    using System.Collections.Generic;
+    using System.Linq;
     using FluentAssertions;
     using NUnit.Framework;
     using TestAssembly;
@@ -11,9 +11,10 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsADiv_ShouldUseTheArithmeticMutator()
         {
-            new Mutation().Create<Calculator>()
-                .For("Div")
+            Mutation.For<Calculator>()
+                .InMethod("Div")
                 .Run()
+                .First()
                 .MutatorsUsed.Should()
                 .ContainSingle("ArithmeticMutator");
         }
@@ -21,9 +22,10 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAMult_ShouldUseTheArithmeticMutator()
         {
-            new Mutation().Create<Calculator>()
-                .For("Mult")
+            Mutation.For<Calculator>()
+                .InMethod("Mult")
                 .Run()
+                .First()
                 .MutatorsUsed.Should()
                 .ContainSingle("ArithmeticMutator");
         }
@@ -31,9 +33,10 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsASub_ShouldUseTheArithmeticMutator()
         {
-            new Mutation().Create<Calculator>()
-                .For("Sub")
+            Mutation.For<Calculator>()
+                .InMethod("Sub")
                 .Run()
+                .First()
                 .MutatorsUsed.Should()
                 .ContainSingle("ArithmeticMutator");
         }
@@ -41,9 +44,10 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAnAdd_ShouldUseTheArithmeticMutator()
         {
-            new Mutation().Create<Calculator>()
-                .For("Add")
+            Mutation.For<Calculator>()
+                .InMethod("Add")
                 .Run()
+                .First()
                 .MutatorsUsed.Should()
                 .ContainSingle("ArithmeticMutator");
         }
@@ -51,19 +55,21 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsArithmeticAndBoolean_ShouldUseTheBooleanAndArithmeticMutator()
         {
-            new Mutation().Create<Calculator>()
-                .For("DivWithCheck")
-                .Run()
-                .MutatorsUsed.Should()
-                .Contain(new List<string> {"BooleanMutator", "ArithmeticMutator"});
+            var mutationResults = Mutation.For<Calculator>()
+                .InMethod("DivWithCheck")
+                .Run();
+
+            mutationResults[0].MutatorsUsed.First().Should().Be("ArithmeticMutator");
+            mutationResults[1].MutatorsUsed.First().Should().Be("BooleanMutator");
         }
 
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAnAdd_ShouldMutateWithSubMultDivAndRem()
         {
-            new Mutation().Create<Calculator>()
-                .For("Add")
+            Mutation.For<Calculator>()
+                .InMethod("Add")
                 .Run()
+                .First()
                 .MutationsPerformed.Should()
                 .Contain( new[]{"sub", "mul", "div", "rem"});
         }

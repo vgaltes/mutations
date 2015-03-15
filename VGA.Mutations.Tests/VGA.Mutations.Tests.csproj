@@ -62,7 +62,7 @@
   <ItemGroup>
     <Compile Include="MutationsTests.cs" />
     <Compile Include="Mutators\ArithmeticMutatorTests.cs" />
-    <Compile Include="Mutators\BooleanMutator.cs" />
+    <Compile Include="Mutators\BooleanMutatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
