@@ -1,22 +1,34 @@
 ﻿namespace VGA.Mutations
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Mono.Cecil;
     using Mono.Cecil.Cil;
+    using Mutators;
 
     public class Mutation
     {
-        
+        private readonly List<IMutator> _mutators; 
         public AssemblyDefinition Assembly { get; set; }
         public MethodDefinition MethodDefinition { get; set; }
 
-        private Type TypeToMutate { get; set; }
+        private Type _typeToMutate;
+
+        public Mutation()
+        {
+            _mutators = new List<IMutator>
+            {
+                new ArithmeticMutator(),
+                new BooleanMutator()
+            };
+        }
 
         public Mutation Create<T>() where T : class
         {
-            TypeToMutate = typeof (T);
-            var fileUri = new Uri(TypeToMutate.Assembly.CodeBase);
+            
+            _typeToMutate = typeof (T);
+            var fileUri = new Uri(_typeToMutate.Assembly.CodeBase);
             Assembly = AssemblyDefinition.ReadAssembly(fileUri.LocalPath);
             
             return this;
@@ -25,13 +37,13 @@
         public Mutation For(string methodName)
         {
             MethodDefinition =
-                Assembly.MainModule.GetType(TypeToMutate.FullName).Methods.First(m => m.Name == methodName);
+                Assembly.MainModule.GetType(_typeToMutate.FullName).Methods.First(m => m.Name == methodName);
             return this;
         }
 
         public MutationResult Run()
         {
-            var originalFilePath = new Uri(TypeToMutate.Assembly.CodeBase).LocalPath;
+            var originalFilePath = new Uri(_typeToMutate.Assembly.CodeBase).LocalPath;
             var assemblyMutatedFileName = originalFilePath.ToLowerInvariant().Replace(".dll", "_Mutated.dll");
 
             var mutatorToUse = DiscoverMutatorsToUse();
@@ -44,16 +56,8 @@
         private string DiscoverMutatorsToUse()
         {
             var mutatorToUse = "";
-            var arithmeticOpCodes = new[] {OpCodes.Add, OpCodes.Sub, OpCodes.Mul, OpCodes.Div};
-            var booleanOpCodes = new[] {OpCodes.Cgt};
-            if (MethodDefinition.Body.Instructions.Any(i => arithmeticOpCodes.Contains(i.OpCode)))
-            {
-                mutatorToUse = "ArithmeticMutator";
-            }
-            else if (MethodDefinition.Body.Instructions.Any(i => booleanOpCodes.Contains(i.OpCode)))
-            {
-                mutatorToUse = "BooleanMutator";
-            }
+
+            mutatorToUse = _mutators.First(m => m.CanHandle(MethodDefinition.Body.Instructions)).GetType().Name;
 
             return mutatorToUse;
         }
