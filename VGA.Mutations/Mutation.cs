@@ -44,11 +44,21 @@
             var originalFilePath = new Uri(_typeToMutate.Assembly.CodeBase).LocalPath;
             var assemblyMutatedFileName = originalFilePath.ToLowerInvariant().Replace(".dll", "_Mutated.dll");
 
-            var mutatorToUse = DiscoverMutatorsToUse();
-            
+            var mutatorsToUse = new List<string>();
+            var mutationsPerformed = new List<string>();
+
+            _mutators.ForEach(m =>
+            {
+                if (m.CanHandle(MethodDefinition.Body.Instructions))
+                {
+                    mutationsPerformed.AddRange(m.Mutate(MethodDefinition.Body.Instructions));
+                    mutatorsToUse.Add(m.GetType().Name);
+                }
+            });
+
             Assembly.Write(assemblyMutatedFileName);
 
-            return new MutationResult {MutatorsUsed = mutatorToUse};
+            return new MutationResult {MutatorsUsed = mutatorsToUse, MutationsPerformed = mutationsPerformed};
         }
 
         private List<string> DiscoverMutatorsToUse()

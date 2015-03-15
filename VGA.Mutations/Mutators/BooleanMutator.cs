@@ -12,5 +12,10 @@
 
             return instructions.Any(i => booleanOpCodes.Contains(i.OpCode));
         }
+
+        public List<string> Mutate(IEnumerable<Instruction> instructions)
+        {
+            return new List<string>();
+        }
     }
 }
