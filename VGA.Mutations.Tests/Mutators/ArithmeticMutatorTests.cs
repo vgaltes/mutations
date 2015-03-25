@@ -1,6 +1,7 @@
 ﻿namespace VGA.Mutations.Tests.Mutators
 {
     using System.Linq;
+    using FakeItEasy;
     using FluentAssertions;
     using NUnit.Framework;
     using TestAssembly;
@@ -8,10 +9,12 @@
     [TestFixture]
     public class ArithmeticMutatorTests
     {
+        private readonly ITestRunner _testRunner = A.Dummy<ITestRunner>();
+
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsADiv_ShouldUseTheArithmeticMutator()
         {
-            Mutation.For<Calculator>()
+            Mutation.For<Calculator>(_testRunner)
                 .InMethod("Div")
                 .Run()
                 .First()
@@ -22,7 +25,7 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAMult_ShouldUseTheArithmeticMutator()
         {
-            Mutation.For<Calculator>()
+            Mutation.For<Calculator>(_testRunner)
                 .InMethod("Mult")
                 .Run()
                 .First()
@@ -33,7 +36,7 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsASub_ShouldUseTheArithmeticMutator()
         {
-            Mutation.For<Calculator>()
+            Mutation.For<Calculator>(_testRunner)
                 .InMethod("Sub")
                 .Run()
                 .First()
@@ -44,7 +47,7 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAnAdd_ShouldUseTheArithmeticMutator()
         {
-            Mutation.For<Calculator>()
+            Mutation.For<Calculator>(_testRunner)
                 .InMethod("Add")
                 .Run()
                 .First()
@@ -55,7 +58,7 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsArithmeticAndBoolean_ShouldUseTheBooleanAndArithmeticMutator()
         {
-            var mutationResults = Mutation.For<Calculator>()
+            var mutationResults = Mutation.For<Calculator>(_testRunner)
                 .InMethod("DivWithCheck")
                 .Run();
 
@@ -66,7 +69,7 @@
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAnAdd_ShouldMutateWithSubMultDivAndRem()
         {
-            Mutation.For<Calculator>()
+            Mutation.For<Calculator>(_testRunner)
                 .InMethod("Add")
                 .Run()
                 .First()

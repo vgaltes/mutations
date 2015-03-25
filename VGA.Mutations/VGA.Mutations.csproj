@@ -51,19 +51,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITestRunner.cs" />
     <Compile Include="Mutation.cs" />
     <Compile Include="MutationClass.cs" />
     <Compile Include="MutationResult.cs" />
     <Compile Include="MutationRunner.cs" />
     <Compile Include="Mutators\ArithmeticMutator.cs" />
     <Compile Include="Mutators\BooleanMutator.cs" />
+    <Compile Include="Mutators\TestToExecute.cs" />
     <Compile Include="Mutators\Mutator.cs" />
+    <Compile Include="Mutators\TestDiscoverer.cs" />
+    <Compile Include="NUnitTestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NUnitConsoleRunner\nunit-console.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="NUnitConsoleRunner\nunit-agent.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NUnitConsoleRunner\nunit-console-runner.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NUnitConsoleRunner\nunit-console.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NUnitConsoleRunner\nunit.core.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NUnitConsoleRunner\nunit.core.interfaces.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NUnitConsoleRunner\nunit.framework.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NUnitConsoleRunner\nunit.util.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
