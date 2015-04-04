@@ -35,7 +35,7 @@
 
         protected abstract Dictionary<OpCode, IEnumerable<OpCode>> Mutations { get; }
 
-        public List<MutationResult> Mutate(MethodToMutate methodToMutate)
+        public IEnumerable<MutationResult> Mutate(MethodToMutate methodToMutate)
         {
             var testToExecute = new TestDiscoverer().DiscoverTestsToExecute(methodToMutate.AssemblyPath,
                 methodToMutate.TypeToMutate.FullName, methodToMutate.MethodName);
@@ -58,7 +58,7 @@
             return instructionOffsets;
         }
 
-        private List<MutationResult> PerformMutations(IEnumerable<InstructionToMutate> instructionsToMutate, MethodToMutate methodToMutate,
+        private IEnumerable<MutationResult> PerformMutations(IEnumerable<InstructionToMutate> instructionsToMutate, MethodToMutate methodToMutate,
             List<TestToExecute> testsToExecute)
         {
             var result = new List<MutationResult>();

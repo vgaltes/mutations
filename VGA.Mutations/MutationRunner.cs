@@ -1,4 +1,8 @@
-﻿namespace VGA.Mutations
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Text;
+
+namespace VGA.Mutations
 {
     using System;
     using System.Collections.Generic;
@@ -38,6 +42,16 @@
 
             _mutators.ForEach(m => mutationResults.AddRange(m.Mutate(methodToMutate)));
 
+            var result = new StringBuilder();
+            mutationResults.ForEach(mr => result.AppendLine(mr.ToString()));
+
+            Debug.Write(result.ToString());
+
+            if (mutationResults.Any(mr => mr.TestResults.Any(tr => tr.Killed == false)))
+            {
+                throw new MutationTestFailedException(result.ToString(), mutationResults);
+            }
+
             return mutationResults;
         }
 
@@ -52,6 +66,16 @@
                 File.Copy(file, Path.Combine(tempPath, file));
             }
             return tempPath;
+        }
+    }
+
+    public class MutationTestFailedException : Exception
+    {
+        public List<MutationResult> Results { get; private set; }
+
+        public MutationTestFailedException(string message, List<MutationResult> results) : base(message)
+        {
+            Results = results;
         }
     }
 }

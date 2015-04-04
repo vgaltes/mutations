@@ -5,7 +5,7 @@
     using System.IO;
     using Mutators;
 
-    internal class NUnitTestRunner : ITestRunner
+    public class NUnitTestRunner : ITestRunner
     {
         public IEnumerable<TestToExecute> RunTests(IEnumerable<TestToExecute> testsToExecute, string tempPath)
         {

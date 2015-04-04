@@ -1,4 +1,6 @@
-﻿namespace VGA.Mutations.Tests.Mutators
+﻿using System.Diagnostics;
+
+namespace VGA.Mutations.Tests.Mutators
 {
     using System.Linq;
     using FakeItEasy;
@@ -70,6 +72,15 @@
             mutationResults.Any(mr => mr.MutationPerformed.Contains("mul")).Should().BeTrue();
             mutationResults.Any(mr => mr.MutationPerformed.Contains("div")).Should().BeTrue();
             mutationResults.Any(mr => mr.MutationPerformed.Contains("rem")).Should().BeTrue();
+        }
+
+        [Test]
+        [ExpectedException(typeof(MutationTestFailedException))]
+        public void WhenMutatingAdd_ShouldSurviveOneTest()
+        {
+            Mutation.For<Calculator>(new NUnitTestRunner())
+                .InMethod("Add")
+                .Run();
         }
     }
 }
