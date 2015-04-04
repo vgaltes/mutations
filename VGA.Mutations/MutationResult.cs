@@ -1,10 +1,13 @@
-﻿namespace VGA.Mutations
+﻿using VGA.Mutations.Mutators;
+
+namespace VGA.Mutations
 {
     using System.Collections.Generic;
 
     public class MutationResult
     {
-        public List<string> MutatorsUsed { get; set; }
-        public List<string> MutationsPerformed { get; set; }
+        public string MutationPerformed { get; set; }
+        public List<TestResult> TestResults { get; set; }
+        public string MutatorUsed { get; set; }
     }
 }

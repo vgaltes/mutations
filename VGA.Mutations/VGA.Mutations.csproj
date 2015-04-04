@@ -63,6 +63,7 @@
     <Compile Include="Mutators\TestDiscoverer.cs" />
     <Compile Include="NUnitTestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NUnitConsoleRunner\nunit-console.exe.config">

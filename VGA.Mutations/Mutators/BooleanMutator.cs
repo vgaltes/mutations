@@ -9,16 +9,18 @@
         {
         }
 
-        protected override string Name
+        protected override string GetName()
         {
-            get { return "BooleanMutator"; }
+            return "BooleanMutator";
         }
 
         protected override Dictionary<OpCode, IEnumerable<OpCode>> Mutations
         {
-            get { return new Dictionary<OpCode, IEnumerable<OpCode>>
+            get { 
+                return new Dictionary<OpCode, IEnumerable<OpCode>>
                     {
-                        {OpCodes.Cgt, new []{OpCodes.Clt}}
+                        {OpCodes.Cgt, new []{OpCodes.Clt}},
+                        {OpCodes.Clt, new []{OpCodes.Cgt}}
                     }; 
             }
         }

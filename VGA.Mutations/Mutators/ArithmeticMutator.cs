@@ -9,9 +9,9 @@
         {
         }
 
-        protected override string Name
+        protected override string GetName()
         {
-            get { return "ArithmeticMutator"; }
+            return "ArithmeticMutator";
         }
 
         protected override Dictionary<OpCode, IEnumerable<OpCode>> Mutations
@@ -20,7 +20,9 @@
             {
                 return new Dictionary<OpCode, IEnumerable<OpCode>>
                 {
-                    {OpCodes.Add, new[] {OpCodes.Sub, OpCodes.Mul, OpCodes.Div, OpCodes.Rem}}
+                    {OpCodes.Add, new[] {OpCodes.Sub, OpCodes.Mul, OpCodes.Div, OpCodes.Rem}},
+                    {OpCodes.Sub, new[] {OpCodes.Add, OpCodes.Mul, OpCodes.Div, OpCodes.Rem}},
+                    {OpCodes.Div, new[] {OpCodes.Add, OpCodes.Mul, OpCodes.Sub, OpCodes.Rem}}
                 };
             }
         }

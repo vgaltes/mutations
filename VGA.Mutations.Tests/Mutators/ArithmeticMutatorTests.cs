@@ -17,9 +17,8 @@
             Mutation.For<Calculator>(_testRunner)
                 .InMethod("Div")
                 .Run()
-                .First()
-                .MutatorsUsed.Should()
-                .ContainSingle("ArithmeticMutator");
+                .All(m => m.MutatorUsed == "ArithmeticMutator");
+
         }
 
         [Test]
@@ -28,9 +27,7 @@
             Mutation.For<Calculator>(_testRunner)
                 .InMethod("Mult")
                 .Run()
-                .First()
-                .MutatorsUsed.Should()
-                .ContainSingle("ArithmeticMutator");
+                .All(m => m.MutatorUsed == "ArithmeticMutator");
         }
 
         [Test]
@@ -39,9 +36,7 @@
             Mutation.For<Calculator>(_testRunner)
                 .InMethod("Sub")
                 .Run()
-                .First()
-                .MutatorsUsed.Should()
-                .ContainSingle("ArithmeticMutator");
+                .All(m => m.MutatorUsed == "ArithmeticMutator");
         }
 
         [Test]
@@ -50,9 +45,7 @@
             Mutation.For<Calculator>(_testRunner)
                 .InMethod("Add")
                 .Run()
-                .First()
-                .MutatorsUsed.Should()
-                .ContainSingle("ArithmeticMutator");
+                .All(m => m.MutatorUsed == "ArithmeticMutator");
         }
 
         [Test]
@@ -62,19 +55,21 @@
                 .InMethod("DivWithCheck")
                 .Run();
 
-            mutationResults[0].MutatorsUsed.First().Should().Be("ArithmeticMutator");
-            mutationResults[1].MutatorsUsed.First().Should().Be("BooleanMutator");
+            mutationResults.Count(mr => mr.MutatorUsed == "ArithmeticMutator").Should().Be(8);
+            mutationResults.Count(mr => mr.MutatorUsed == "BooleanMutator").Should().Be(1);
         }
 
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAnAdd_ShouldMutateWithSubMultDivAndRem()
         {
-            Mutation.For<Calculator>(_testRunner)
+            var mutationResults = Mutation.For<Calculator>(_testRunner)
                 .InMethod("Add")
-                .Run()
-                .First()
-                .MutationsPerformed.Should()
-                .Contain( new[]{"sub", "mul", "div", "rem"});
+                .Run();
+
+            mutationResults.Any(mr => mr.MutationPerformed.Contains("sub")).Should().BeTrue();
+            mutationResults.Any(mr => mr.MutationPerformed.Contains("mul")).Should().BeTrue();
+            mutationResults.Any(mr => mr.MutationPerformed.Contains("div")).Should().BeTrue();
+            mutationResults.Any(mr => mr.MutationPerformed.Contains("rem")).Should().BeTrue();
         }
     }
 }

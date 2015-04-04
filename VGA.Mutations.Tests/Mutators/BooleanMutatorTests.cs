@@ -17,9 +17,7 @@
             Mutation.For<BooleanMachine>(_testRunner)
                 .InMethod("GreaterThan")
                 .Run()
-                .First()
-                .MutatorsUsed.Should()
-                .ContainSingle("BooleanMutator");
+                .All(m => m.MutatorUsed == "BooleanMutator");
         }
 
         [Test]
@@ -28,9 +26,7 @@
             Mutation.For<BooleanMachine>(_testRunner)
                 .InMethod("LessThan")
                 .Run()
-                .First()
-                .MutatorsUsed.Should()
-                .ContainSingle("BooleanMutator");
+                .All(m => m.MutatorUsed == "BooleanMutator");
         }
     }
 }

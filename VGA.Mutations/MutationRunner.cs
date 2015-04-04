@@ -36,7 +36,7 @@
             var mutationResults = new List<MutationResult>();
             var methodToMutate = new MethodToMutate(_assemblyPath, _typeToMutate, _methodName);
 
-            _mutators.ForEach(m => mutationResults.Add(m.Mutate(methodToMutate)));
+            _mutators.ForEach(m => mutationResults.AddRange(m.Mutate(methodToMutate)));
 
             return mutationResults;
         }

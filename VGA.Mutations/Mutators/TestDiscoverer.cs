@@ -64,13 +64,15 @@ namespace VGA.Mutations.Mutators
 
         private static IEnumerable<MethodDefinition> GetTestMethodsInAssembly(AssemblyDefinition possibleTestAssembly)
         {
-            return possibleTestAssembly.MainModule.GetTypes()
+            var methods = possibleTestAssembly.MainModule.GetTypes()
                 .SelectMany(t => t.GetMethods())
                 .Where(
                     m =>
-                        m.HasCustomAttributes &&
+                        m.HasCustomAttributes
+                        &&
                         m.CustomAttributes.Any(
                             ca => ca.AttributeType.FullName == "NUnit.Framework.TestAttribute"));
+            return methods;
         }
     }
 }

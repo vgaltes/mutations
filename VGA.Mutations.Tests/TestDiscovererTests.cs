@@ -25,12 +25,13 @@
         }
 
         [Test]
-        public void ShouldNotDiscoverAnyTestThatCallSub()
+        public void ShouldNotDiscoverAnyTestThatCallsMult()
         {
+            // remove this test when all the mutators tested
             var testDiscoverer = new TestDiscoverer();
 
             var testsToExecute = testDiscoverer.DiscoverTestsToExecute(".\\VGA.Mutations.TestAssembly.dll",
-                "VGA.Mutations.TestAssembly.Calculator", "Sub");
+                "VGA.Mutations.TestAssembly.Calculator", "Mult");
 
             testsToExecute.Should().HaveCount(0);
         }

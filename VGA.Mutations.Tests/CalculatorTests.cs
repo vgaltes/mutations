@@ -23,5 +23,14 @@
 
             Assert.AreEqual(5, result);
         }
+
+        [Test]
+        public void TestSub()
+        {
+            var calculator = new Calculator();
+            var result = calculator.Sub(2, 1);
+
+            Assert.AreEqual(1, result);
+        }
     }
 }

@@ -30,24 +30,19 @@
             _testRunner = testRunner;
         }
 
-        protected abstract string Name { get; }
+        protected abstract string GetName();
+    
 
         protected abstract Dictionary<OpCode, IEnumerable<OpCode>> Mutations { get; }
 
-        public MutationResult Mutate(MethodToMutate methodToMutate)
+        public List<MutationResult> Mutate(MethodToMutate methodToMutate)
         {
             var testToExecute = new TestDiscoverer().DiscoverTestsToExecute(methodToMutate.AssemblyPath,
                 methodToMutate.TypeToMutate.FullName, methodToMutate.MethodName);
 
             var instructionOffsets = GetInstructionsToMutate(methodToMutate);
 
-            var result = PerformMutations(instructionOffsets, methodToMutate, testToExecute);
-            
-            return new MutationResult
-            {
-                MutationsPerformed = result,
-                MutatorsUsed = new List<string> {Name}
-            };
+            return PerformMutations(instructionOffsets, methodToMutate, testToExecute);
         }
 
         private IEnumerable<InstructionToMutate> GetInstructionsToMutate(MethodToMutate methodToMutate)
@@ -63,10 +58,10 @@
             return instructionOffsets;
         }
 
-        private List<string> PerformMutations(IEnumerable<InstructionToMutate> instructionsToMutate, MethodToMutate methodToMutate,
+        private List<MutationResult> PerformMutations(IEnumerable<InstructionToMutate> instructionsToMutate, MethodToMutate methodToMutate,
             List<TestToExecute> testsToExecute)
         {
-            var result = new List<string>();
+            var result = new List<MutationResult>();
 
             SaveOriginalAssembly(methodToMutate.AssemblyPath);
 
@@ -79,7 +74,7 @@
             return result;
         }
 
-        private IEnumerable<string> MutateInstruction(InstructionToMutate instructionToMutate, MethodToMutate methodToMutate, List<TestToExecute> testsToExecute)
+        private IEnumerable<MutationResult> MutateInstruction(InstructionToMutate instructionToMutate, MethodToMutate methodToMutate, List<TestToExecute> testsToExecute)
         {
             var assembly = AssemblyDefinition.ReadAssembly(GetOriginalAssemblyPath(methodToMutate.AssemblyPath));
 
@@ -87,16 +82,41 @@
 
             var mutations = Mutations[instructionToMutate.OpCode];
 
+            var results = new List<MutationResult>();
+
             foreach (var opCode in mutations)
             {
                 instruction.OpCode = opCode;
 
                 assembly.Write(methodToMutate.AssemblyPath);
 
-                _testRunner.RunTests(testsToExecute, Path.GetDirectoryName(methodToMutate.AssemblyPath));
+                var greenTests = _testRunner.RunTests(testsToExecute, Path.GetDirectoryName(methodToMutate.AssemblyPath));
+
+                results.Add(GetMutationResult(instructionToMutate.OpCode, opCode, testsToExecute, greenTests));
             }
 
-            return mutations.Select(m => m.Name);
+            return results;
+        }
+
+        private MutationResult GetMutationResult(OpCode originalOpcode, OpCode mutatedOpCode, List<TestToExecute> testsToExecute,
+            IEnumerable<TestToExecute> greenTests)
+        {
+            var mutationResult = new MutationResult
+            {
+                MutatorUsed = GetName(),
+                MutationPerformed = string.Format("Mutated {0} to {1}", originalOpcode, mutatedOpCode),
+                TestResults = new List<TestResult>()
+            };
+
+            testsToExecute.ForEach(
+                t =>
+                    mutationResult.TestResults.Add(new TestResult
+                    {
+                        TestName = string.Format("{0}.{1}", t.ClassName, t.MethodName),
+                        Killed = !greenTests.Contains(t)
+                    }));
+
+            return mutationResult;
         }
 
         private static void SaveOriginalAssembly(string assemblyPath)
