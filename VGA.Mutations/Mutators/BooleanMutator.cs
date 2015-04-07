@@ -5,10 +5,6 @@
 
     public class BooleanMutator : Mutator
     {
-        public BooleanMutator(ITestRunner testRunner) : base(testRunner)
-        {
-        }
-
         protected override string GetName()
         {
             return "BooleanMutator";

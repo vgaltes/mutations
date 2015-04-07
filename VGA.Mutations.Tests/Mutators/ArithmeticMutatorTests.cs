@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace VGA.Mutations.Tests.Mutators
+﻿namespace VGA.Mutations.Tests.Mutators
 {
     using System.Linq;
     using FakeItEasy;
@@ -16,8 +14,9 @@ namespace VGA.Mutations.Tests.Mutators
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsADiv_ShouldUseTheArithmeticMutator()
         {
-            Mutation.For<Calculator>(_testRunner)
+            Mutation.For<Calculator>()
                 .InMethod("Div")
+                .WithTestRunner(_testRunner)
                 .Run()
                 .All(m => m.MutatorUsed == "ArithmeticMutator");
 
@@ -26,8 +25,9 @@ namespace VGA.Mutations.Tests.Mutators
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAMult_ShouldUseTheArithmeticMutator()
         {
-            Mutation.For<Calculator>(_testRunner)
+            Mutation.For<Calculator>()
                 .InMethod("Mult")
+                .WithTestRunner(_testRunner)
                 .Run()
                 .All(m => m.MutatorUsed == "ArithmeticMutator");
         }
@@ -35,8 +35,9 @@ namespace VGA.Mutations.Tests.Mutators
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsASub_ShouldUseTheArithmeticMutator()
         {
-            Mutation.For<Calculator>(_testRunner)
+            Mutation.For<Calculator>()
                 .InMethod("Sub")
+                .WithTestRunner(_testRunner)
                 .Run()
                 .All(m => m.MutatorUsed == "ArithmeticMutator");
         }
@@ -44,8 +45,9 @@ namespace VGA.Mutations.Tests.Mutators
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAnAdd_ShouldUseTheArithmeticMutator()
         {
-            Mutation.For<Calculator>(_testRunner)
+            Mutation.For<Calculator>()
                 .InMethod("Add")
+                .WithTestRunner(_testRunner)
                 .Run()
                 .All(m => m.MutatorUsed == "ArithmeticMutator");
         }
@@ -53,8 +55,9 @@ namespace VGA.Mutations.Tests.Mutators
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsArithmeticAndBoolean_ShouldUseTheBooleanAndArithmeticMutator()
         {
-            var mutationResults = Mutation.For<Calculator>(_testRunner)
+            var mutationResults = Mutation.For<Calculator>()
                 .InMethod("DivWithCheck")
+                .WithTestRunner(_testRunner)
                 .Run();
 
             mutationResults.Count(mr => mr.MutatorUsed == "ArithmeticMutator").Should().Be(8);
@@ -64,8 +67,9 @@ namespace VGA.Mutations.Tests.Mutators
         [Test]
         public void WhenTheMutationRuns_IfTheCurrentOperationIsAnAdd_ShouldMutateWithSubMultDivAndRem()
         {
-            var mutationResults = Mutation.For<Calculator>(_testRunner)
+            var mutationResults = Mutation.For<Calculator>()
                 .InMethod("Add")
+                .WithTestRunner(_testRunner)
                 .Run();
 
             mutationResults.Any(mr => mr.MutationPerformed.Contains("sub")).Should().BeTrue();
@@ -78,7 +82,7 @@ namespace VGA.Mutations.Tests.Mutators
         [ExpectedException(typeof(MutationTestFailedException))]
         public void WhenMutatingAdd_ShouldSurviveOneTest()
         {
-            Mutation.For<Calculator>(new NUnitTestRunner())
+            Mutation.For<Calculator>()
                 .InMethod("Add")
                 .Run();
         }

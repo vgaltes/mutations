@@ -15,7 +15,7 @@
         [Test]
         public void WhenAMutationIsCreatedForAClass_AMutationClassObjectIsCreated()
         {
-            Mutation.For<Calculator>(_testRunner).Should().BeOfType<MutationClass>();
+            Mutation.For<Calculator>().Should().BeOfType<MutationClass>();
         }
 
 
@@ -23,15 +23,15 @@
         public void WhenAMethodIsSpecified_AMutationRunnerObjectIsCreated()
         {
 
-            Mutation.For<Calculator>(_testRunner).InMethod("Add").Should().BeOfType<MutationRunner>();
+            Mutation.For<Calculator>().InMethod("Add").Should().BeOfType<MutationRunner>();
         }
 
         [Test]
-        public void WhenTheMutationRuns_ShouldCreateANewFile()
+        public void WhenTheMutationRuns_ShouldSaveTheOriginalFile()
         {
-            Mutation.For<Calculator>(_testRunner).InMethod("Add").Run();
+            Mutation.For<Calculator>().InMethod("Sub").WithTestRunner(A.Dummy<ITestRunner>()).Run();
 
-            File.Exists(".\\VGA.Mutations.TestAssembly_Mutated.dll").Should().BeTrue();
+            File.Exists(".\\VGA.Mutations.TestAssembly_original.dll").Should().BeTrue();
         }
 
         [Test]

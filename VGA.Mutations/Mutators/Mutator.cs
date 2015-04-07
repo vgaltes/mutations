@@ -23,20 +23,17 @@
 
     public abstract class Mutator
     {
-        private readonly ITestRunner _testRunner;
-
-        protected Mutator(ITestRunner testRunner)
-        {
-            _testRunner = testRunner;
-        }
+        private ITestRunner _testRunner;
 
         protected abstract string GetName();
     
 
         protected abstract Dictionary<OpCode, IEnumerable<OpCode>> Mutations { get; }
 
-        public IEnumerable<MutationResult> Mutate(MethodToMutate methodToMutate)
+        public IEnumerable<MutationResult> Mutate(MethodToMutate methodToMutate, ITestRunner testRunner)
         {
+            _testRunner = testRunner;
+
             var testToExecute = new TestDiscoverer().DiscoverTestsToExecute(methodToMutate.AssemblyPath,
                 methodToMutate.TypeToMutate.FullName, methodToMutate.MethodName);
 
@@ -74,7 +71,8 @@
             return result;
         }
 
-        private IEnumerable<MutationResult> MutateInstruction(InstructionToMutate instructionToMutate, MethodToMutate methodToMutate, List<TestToExecute> testsToExecute)
+        private IEnumerable<MutationResult> MutateInstruction(InstructionToMutate instructionToMutate, 
+            MethodToMutate methodToMutate, List<TestToExecute> testsToExecute)
         {
             var assembly = AssemblyDefinition.ReadAssembly(GetOriginalAssemblyPath(methodToMutate.AssemblyPath));
 

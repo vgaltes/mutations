@@ -5,10 +5,6 @@
 
     public class ArithmeticMutator : Mutator
     {
-        public ArithmeticMutator(ITestRunner testRunner) : base(testRunner)
-        {
-        }
-
         protected override string GetName()
         {
             return "ArithmeticMutator";
