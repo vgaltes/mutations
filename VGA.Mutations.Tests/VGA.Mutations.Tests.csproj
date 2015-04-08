@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BooleanMachineTests.cs" />
     <Compile Include="CalculatorTests.cs" />
     <Compile Include="MutationsTests.cs" />
     <Compile Include="Mutators\ArithmeticMutatorTests.cs" />

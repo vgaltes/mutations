@@ -18,18 +18,18 @@
                 .InMethod("Div")
                 .WithTestRunner(_testRunner)
                 .Run()
-                .All(m => m.MutatorUsed == "ArithmeticMutator");
-
+                .Any(m => m.MutatorUsed == "ArithmeticMutator")
+                .Should().BeTrue();
         }
 
         [Test]
-        public void WhenTheMutationRuns_IfTheCurrentOperationIsAMult_ShouldUseTheArithmeticMutator()
+        public void WhenTheMutationRuns_IfTheCurrentOperationIsAMult_ShouldReturnNoResults_BecauseThereIsNoTest()
         {
             Mutation.For<Calculator>()
                 .InMethod("Mult")
                 .WithTestRunner(_testRunner)
                 .Run()
-                .All(m => m.MutatorUsed == "ArithmeticMutator");
+                .Should().HaveCount(0);
         }
 
         [Test]
@@ -39,7 +39,8 @@
                 .InMethod("Sub")
                 .WithTestRunner(_testRunner)
                 .Run()
-                .All(m => m.MutatorUsed == "ArithmeticMutator");
+                .Any(m => m.MutatorUsed == "ArithmeticMutator")
+                .Should().BeTrue();
         }
 
         [Test]
@@ -49,7 +50,19 @@
                 .InMethod("Add")
                 .WithTestRunner(_testRunner)
                 .Run()
-                .All(m => m.MutatorUsed == "ArithmeticMutator");
+                .Any(m => m.MutatorUsed == "ArithmeticMutator")
+                .Should().BeTrue();
+        }
+
+        [Test]
+        public void WhenTheMutationRuns_IfTheCurrentOperationIsAnRem_ShouldUseTheArithmeticMutator()
+        {
+            Mutation.For<Calculator>()
+                .InMethod("Rem")
+                .WithTestRunner(_testRunner)
+                .Run()
+                .Any(m => m.MutatorUsed == "ArithmeticMutator")
+                .Should().BeTrue();
         }
 
         [Test]
@@ -85,6 +98,17 @@
             Mutation.For<Calculator>()
                 .InMethod("Add")
                 .Run();
+        }
+
+        [Test]
+        public void AFunctionWithoutATestShouldNotReturnAnyResult()
+        {
+            var mutationResults = Mutation.For<Calculator>()
+                .InMethod("NoTestFunction")
+                .WithTestRunner(_testRunner)
+                .Run();
+
+            mutationResults.Should().HaveCount(0);
         }
     }
 }

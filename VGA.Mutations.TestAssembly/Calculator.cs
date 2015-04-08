@@ -22,12 +22,22 @@
             return a/b;
         }
 
+        public int Rem(int a, int b)
+        {
+            return a%b;
+        }
+
         public int DivWithCheck(int a, int b)
         {
-            if ( a < b)
+            if ( a > b)
                 return a / b;
 
             return b/a;
+        }
+
+        public int NoTestFunction()
+        {
+            return 1;
         }
     }
 }

@@ -18,7 +18,9 @@
                 {
                     {OpCodes.Add, new[] {OpCodes.Sub, OpCodes.Mul, OpCodes.Div, OpCodes.Rem}},
                     {OpCodes.Sub, new[] {OpCodes.Add, OpCodes.Mul, OpCodes.Div, OpCodes.Rem}},
-                    {OpCodes.Div, new[] {OpCodes.Add, OpCodes.Mul, OpCodes.Sub, OpCodes.Rem}}
+                    {OpCodes.Div, new[] {OpCodes.Add, OpCodes.Mul, OpCodes.Sub, OpCodes.Rem}},
+                    {OpCodes.Mul, new[] {OpCodes.Add, OpCodes.Div, OpCodes.Sub, OpCodes.Rem}},
+                    {OpCodes.Rem, new[] {OpCodes.Add, OpCodes.Div, OpCodes.Sub, OpCodes.Mul}}
                 };
             }
         }

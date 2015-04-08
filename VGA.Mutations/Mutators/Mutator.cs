@@ -37,6 +37,11 @@
             var testToExecute = new TestDiscoverer().DiscoverTestsToExecute(methodToMutate.AssemblyPath,
                 methodToMutate.TypeToMutate.FullName, methodToMutate.MethodName);
 
+            if (!testToExecute.Any())
+            {
+                return new List<MutationResult>();
+            }
+
             var instructionOffsets = GetInstructionsToMutate(methodToMutate);
 
             return PerformMutations(instructionOffsets, methodToMutate, testToExecute);

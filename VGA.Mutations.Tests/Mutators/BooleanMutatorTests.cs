@@ -18,7 +18,8 @@
                 .InMethod("GreaterThan")
                 .WithTestRunner(_testRunner)
                 .Run()
-                .All(m => m.MutatorUsed == "BooleanMutator");
+                .Any(m => m.MutatorUsed == "BooleanMutator")
+                .Should().BeTrue();
         }
 
         [Test]
@@ -28,7 +29,8 @@
                 .InMethod("LessThan")
                 .WithTestRunner(_testRunner)
                 .Run()
-                .All(m => m.MutatorUsed == "BooleanMutator");
+                .Any(m => m.MutatorUsed == "BooleanMutator")
+                .Should().BeTrue();
         }
     }
 }
